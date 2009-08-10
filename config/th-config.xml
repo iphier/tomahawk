@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<luceneIndex>
+	<properties>
+		<analyzer class="org.apache.lucene.analysis.standard.StandardAnalyzer"/>
+	</properties>
+														
+	<index>
+		<msWord setBoost="1.2">
+		 	<bean name="wordIndexer">
+				<mime>application/msword</mime>				
+			</bean>
+			<fields>	
+				<luceneField name="fullText" value="content" type="Text"/>
+			</fields>	
+		</msWord>
+		<msExcel setBoost="1.3">
+			<bean name="excelIndexer">
+				<mime>application/vnd.ms-excel</mime>				
+			</bean>
+			<fields>	
+				<luceneField name="fullText" value="content" type="Text"/>
+			</fields>	
+		</msExcel>
+		<txt setBoost="0.1">
+			<bean name="textIndexer">
+				<mime>text/plain</mime>			
+			</bean>
+			<fields>
+				<luceneField name="content"  type="Text"/>
+				<luceneField name="fileName" type="Keyword"/>
+				
+			</fields>	
+		</txt>
+		
+	</index>
+	<search>
+		<!--
+ 			org.apache.lucene.search.TermQuery
+ 			org.apache.lucene.search.PrefixQuery
+ 			org.apache.lucene.search.FuzzyQuery
+       	<queryTerm class="org.apache.lucene.search.WildcardQuery">
+               <term field="creator"/>
+       	</queryTerm>
+       	<rangeQuery>
+                   <term field="creator"/>
+                   <booleanInclusive value="true"/>
+      	 </rangeQuery>
+     	  <queryParser>
+    	                   <defaultSearchField value="title"/>
+   	    </queryParser>
+ 		 -->
+ 		 <!--If you want to search the field add it in the element searchFields -->
+
+		<multiFieldQueryParser>
+			<searchFields sep=",">title,subject,creator,description,publisher,contributor,fullText</searchFields>
+		</multiFieldQueryParser>
+	</search>
+	<searchResult>
+		<fieldsToDisplay setHighlighter="true">				
+			<luceneField name="title" label="title"/>
+			<luceneField name="subject" label="subject"/>
+			<luceneField name="creator" label="creator"/>	
+			<luceneField name="fullText" label="full text" setFragmenter="50"/>	
+		</fieldsToDisplay>
+		
+	</searchResult>
+	
+</luceneIndex>
